@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIZO Buddy – Kids Active Water Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%}
+  body{
+    font-family:'Nunito',sans-serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background: #c8f5dc;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, #a8edcc 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, #b3e8f5 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, #d4f7e0 0%, transparent 70%);
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  body::before{
+    content:'💧';
+    position:fixed;top:5%;left:5%;font-size:60px;opacity:0.15;animation:float1 6s ease-in-out infinite;pointer-events:none;
+  }
+  body::after{
+    content:'⭐';
+    position:fixed;bottom:10%;right:8%;font-size:50px;opacity:0.12;animation:float2 8s ease-in-out infinite;pointer-events:none;
+  }
+  @keyframes float1{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-20px) rotate(10deg)}}
+  @keyframes float2{0%,100%{transform:translateY(0) rotate(5deg)}50%{transform:translateY(-15px) rotate(-5deg)}}
+
+  .page-wrapper{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:440px;}
+
+  .brand-header{text-align:center;animation:fadeDown 0.6s ease both;}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+  .brand-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px;}
+  .brand-logo svg{width:48px;height:48px;filter:drop-shadow(0 4px 8px rgba(37,165,96,0.3));}
+  .brand-name{font-size:28px;font-weight:900;color:#1a7a4a;letter-spacing:-0.5px;}
+  .brand-name span{color:#25a560;}
+  .brand-tagline{font-size:13px;color:#2a9a5a;font-weight:700;letter-spacing:1px;text-transform:uppercase;opacity:0.85;}
+  .brand-pills{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+  .pill{background:rgba(255,255,255,0.8);border:1.5px solid #b5e8cc;color:#1a7a4a;font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;backdrop-filter:blur(4px);}
+
+  .phone{
+    width:100%;max-width:420px;height:680px;
+    border-radius:28px;overflow:hidden;
+    display:flex;flex-direction:column;
+    box-shadow:0 24px 80px rgba(37,165,96,0.25), 0 8px 32px rgba(0,0,0,0.12);
+    background:#fff;
+    border:2px solid rgba(255,255,255,0.9);
+    animation:fadeUp 0.7s ease 0.2s both;
+  }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+  .wa-header{
+    background:linear-gradient(135deg,#1a7a4a 0%,#25a560 100%);
+    padding:12px 16px;
+    display:flex;align-items:center;gap:10px;color:#fff;flex-shrink:0;
+    position:relative;overflow:hidden;
+  }
+  .wa-header::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.08);}
+  .avatar{width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;border:2.5px solid rgba(255,255,255,0.5);box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+  .header-info{flex:1}
+  .header-name{font-size:16px;font-weight:900;letter-spacing:0.3px;}
+  .header-status{font-size:11px;opacity:0.9;font-weight:600;display:flex;align-items:center;gap:4px;}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:#7fff7f;display:inline-block;box-shadow:0 0 5px rgba(127,255,127,0.7);}
+  .badge{background:rgba(255,255,255,0.2);color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px;display:inline-flex;align-items:center;gap:3px;margin-top:3px;border:1px solid rgba(255,255,255,0.3);}
+  .header-menu{cursor:pointer;opacity:0.85;font-size:20px;padding:4px;}
+
+  .chat-bg{
+    flex:1;overflow-y:auto;padding:10px 12px;
+    background:#e5ddd5;
+    background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2325a560' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth;
+  }
+  .chat-bg::-webkit-scrollbar{width:4px}
+  .chat-bg::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:4px}
+
+  .date-divider{text-align:center;margin:8px 0;}
+  .date-divider span{background:rgba(255,255,255,0.85);color:#666;font-size:11px;font-weight:700;padding:4px 12px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+
+  .bubble-row{display:flex;align-items:flex-end;gap:6px;animation:bubbleIn 0.3s ease both;}
+  @keyframes bubbleIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .bubble-row.user{flex-direction:row-reverse;}
+  .bubble-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;background:#25a560;display:flex;align-items:center;justify-content:center;}
+
+  .bubble{max-width:78%;padding:9px 12px 6px;border-radius:14px;font-size:14px;line-height:1.5;position:relative;word-break:break-word;}
+  .bubble.bot{background:#ffffff;border-radius:14px 14px 14px 2px;color:#111;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+  .bubble.user{background:#dcf8c6;border-radius:14px 14px 2px 14px;color:#111;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+  .bubble-time{font-size:10px;color:#999;margin-top:4px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:3px;}
+  .bubble.user .bubble-time{color:#7a9e7a;}
+  .tick{font-size:12px;color:#53bdeb;}
+
+  .typing-bubble{background:#fff;padding:10px 14px;border-radius:14px 14px 14px 2px;display:inline-flex;align-items:center;gap:4px;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+  .dot{width:7px;height:7px;border-radius:50%;background:#bbb;animation:bounce 1.2s infinite;}
+  .dot:nth-child(2){animation-delay:0.2s}
+  .dot:nth-child(3){animation-delay:0.4s}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+
+  .quick-replies{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 2px;}
+  .qr-btn{background:#fff;border:1.5px solid #25a560;color:#1a7a4a;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;padding:6px 12px;border-radius:20px;cursor:pointer;transition:all 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(37,165,96,0.15);}
+  .qr-btn:hover{background:#e8f8ef;transform:translateY(-1px);box-shadow:0 3px 8px rgba(37,165,96,0.2);}
+  .qr-btn:active{transform:scale(0.96);}
+
+  .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:2px 0;}
+  .product-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1.5px solid #e8f5ee;transition:transform 0.15s;}
+  .product-card:hover{transform:translateY(-2px);}
+  .product-card-img{height:80px;display:flex;align-items:center;justify-content:center;font-size:40px;background:linear-gradient(135deg,#e8f8ef,#d0f0e0);}
+  .product-card-body{padding:8px 9px 10px;}
+  .product-card-name{font-weight:900;font-size:13px;color:#1a7a4a;line-height:1.2;}
+  .product-card-flavor{font-size:11px;color:#888;margin:2px 0 5px;}
+  .product-card-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px;}
+  .tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:6px;}
+  .tag.green{background:#e8f8ef;color:#1a7a4a;}
+  .tag.blue{background:#e8f4ff;color:#1a4a8a;}
+  .tag.orange{background:#fff3e8;color:#c06010;}
+  .product-card-price{font-weight:900;color:#e63946;font-size:14px;margin-bottom:5px;}
+  .order-btn{width:100%;padding:6px;background:linear-gradient(135deg,#25a560,#1a7a4a);color:#fff;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;transition:all 0.15s;box-shadow:0 2px 6px rgba(37,165,96,0.3);}
+  .order-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(37,165,96,0.4);}
+
+  .input-bar{background:#f0f0f0;padding:8px 10px;display:flex;align-items:center;gap:8px;flex-shrink:0;border-top:1px solid #ddd;}
+  .attach-btn{width:36px;height:36px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:0.6;}
+  .input-wrap{flex:1;background:#fff;border-radius:24px;padding:8px 14px;display:flex;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+  .msg-input{flex:1;border:none;outline:none;font-family:'Nunito',sans-serif;font-size:14px;background:transparent;color:#111;}
+  .msg-input::placeholder{color:#bbb;}
+  .send-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#25a560,#1a7a4a);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s;box-shadow:0 3px 10px rgba(37,165,96,0.35);}
+  .send-btn:hover{transform:scale(1.05);box-shadow:0 5px 15px rgba(37,165,96,0.45);}
+  .send-btn:active{transform:scale(0.95);}
+  .send-btn svg{width:20px;height:20px;fill:white;}
+
+  .order-summary{background:#fff8ec;border:1.5px solid #f4b942;border-radius:14px;padding:12px 14px;font-size:13px;}
+  .order-summary-title{font-weight:900;color:#c06010;font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+  .order-row{display:flex;justify-content:space-between;padding:3px 0;color:#444;font-size:13px;}
+  .order-total{font-weight:900;font-size:15px;color:#1a7a4a;border-top:1.5px dashed #e8d8b0;margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;}
+  .confirm-btn{width:100%;margin-top:10px;padding:10px;background:linear-gradient(135deg,#25D366,#1da851);color:#fff;border:none;border-radius:10px;font-family:'Nunito',sans-serif;font-weight:900;font-size:14px;cursor:pointer;transition:all 0.15s;box-shadow:0 3px 10px rgba(37,211,102,0.35);}
+  .confirm-btn:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(37,211,102,0.45);}
+
+  .wa-link{display:inline-flex;align-items:center;gap:7px;background:#25D366;color:#fff;font-weight:900;padding:9px 18px;border-radius:10px;text-decoration:none;font-size:13px;margin-top:6px;box-shadow:0 3px 10px rgba(37,211,102,0.35);transition:all 0.15s;}
+  .wa-link:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(37,211,102,0.45);}
+
+  .footer-note{font-size:11px;color:#2a9a5a;font-weight:700;text-align:center;opacity:0.8;animation:fadeUp 0.7s ease 0.5s both;}
+
+  @media(max-width:480px){
+    body{padding:10px;background:#e5ddd5;}
+    .phone{border-radius:20px;height:calc(100vh - 160px);}
+    .brand-header{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="24" fill="#e8f8ef"/>
+        <ellipse cx="24" cy="18" rx="9" ry="11" fill="#25a560"/>
+        <ellipse cx="24" cy="16" rx="5" ry="6.5" fill="#5fdda0" opacity="0.5"/>
+        <circle cx="20.5" cy="15" r="1.5" fill="#fff"/>
+        <ellipse cx="24" cy="32" rx="7" ry="4" fill="#1a7a4a"/>
+        <path d="M18 29 Q24 37 30 29" stroke="#25a560" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M14 20 Q10 17 13 13" stroke="#5fdda0" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M34 20 Q38 17 35 13" stroke="#5fdda0" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="16" cy="21" rx="3.5" ry="2.5" fill="#5fdda0" opacity="0.7"/>
+        <ellipse cx="32" cy="21" rx="3.5" ry="2.5" fill="#5fdda0" opacity="0.7"/>
+      </svg>
+      <div>
+        <div class="brand-name">DRIZO <span>Buddy</span></div>
+        <div class="brand-tagline">Kids Active Water</div>
+      </div>
+    </div>
+    <div class="brand-pills">
+      <span class="pill">✅ Zero Sugar</span>
+      <span class="pill">💊 Added Vitamins</span>
+      <span class="pill">⚡ Active Kids</span>
+      <span class="pill">🤖 AI Powered</span>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="wa-header">
+      <div class="avatar">
+        <svg viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="23" cy="23" r="23" fill="#e8f8ef"/>
+          <ellipse cx="23" cy="17" rx="8.5" ry="10.5" fill="#25a560"/>
+          <ellipse cx="23" cy="15.5" rx="5" ry="6.5" fill="#5fdda0" opacity="0.5"/>
+          <circle cx="19.5" cy="14" r="1.5" fill="#fff"/>
+          <ellipse cx="23" cy="31" rx="7" ry="4" fill="#1a7a4a"/>
+          <path d="M17 28 Q23 35 29 28" stroke="#25a560" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse cx="15" cy="19" rx="3.5" ry="2.5" fill="#5fdda0" opacity="0.7"/>
+          <ellipse cx="31" cy="19" rx="3.5" ry="2.5" fill="#5fdda0" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="header-info">
+        <div class="header-name">Drizo Buddy 💧</div>
+        <div class="header-status"><span class="status-dot"></span> Online · Ready to help!</div>
+        <div><span class="badge">✓ No Sugar &nbsp;·&nbsp; +Vitamins &nbsp;·&nbsp; Kids Active</span></div>
+      </div>
+      <div class="header-menu">⋮</div>
+    </div>
+
+    <div class="chat-bg" id="chatBg">
+      <div class="date-divider"><span>TODAY</span></div>
+    </div>
+
+    <div class="input-bar">
+      <span class="attach-btn">😊</span>
+      <div class="input-wrap">
+        <input class="msg-input" id="msgInput" placeholder="Ask Drizo anything..." autocomplete="off"/>
+      </div>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer-note">💧 Powered by DRIZO Buddy AI · Chat, order & stay hydrated!</div>
+</div>
+
+<script>
+const products=[
+  {id:1,emoji:"💙",color:"#dbeeff",name:"DRIZO Splash Blue",flavor:"Berry Blast",price:45,per:"₹45 / 500ml"},
+  {id:2,emoji:"💚",color:"#dbffe8",name:"DRIZO Go Green",flavor:"Watermelon Mint",price:45,per:"₹45 / 500ml"},
+  {id:3,emoji:"🧡",color:"#fff3db",name:"DRIZO Sunny",flavor:"Mango Orange",price:45,per:"₹45 / 500ml"},
+  {id:4,emoji:"❤️",color:"#ffdbe8",name:"DRIZO Power Pack",flavor:"Mixed 12-pack",price:480,per:"₹480 / 12-pack"}
+];
+let cart={};
+let convState="greeting";
+let deliveryStep=null;
+let deliveryData={name:"",address:"",phone:""};
+let isTyping=false;
+
+function now(){const d=new Date();return d.getHours().toString().padStart(2,"0")+":"+d.getMinutes().toString().padStart(2,"0");}
+
+function scrollBottom(){
+  const bg=document.getElementById("chatBg");
+  setTimeout(()=>{bg.scrollTop=bg.scrollHeight;},50);
+}
+
+function removeQR(){document.getElementById("qr")?.remove();}
+
+function appendBotBubble(html,withAvatar=true){
+  removeQR();
+  const bg=document.getElementById("chatBg");
+  const row=document.createElement("div");
+  row.className="bubble-row";
+  row.innerHTML=`${withAvatar?`<div class="bubble-avatar"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="14" fill="#e8f8ef"/><ellipse cx="14" cy="10" rx="5.5" ry="6.5" fill="#25a560"/><ellipse cx="14" cy="9" rx="3" ry="4" fill="#5fdda0" opacity="0.5"/><circle cx="12" cy="8.5" r="1" fill="#fff"/><ellipse cx="14" cy="19" rx="4.5" ry="2.5" fill="#1a7a4a"/></svg></div>`:'<div style="width:28px;flex-shrink:0"></div>'}
+  <div class="bubble bot">${html}<div class="bubble-time">${now()}</div></div>`;
+  bg.appendChild(row);
+  scrollBottom();
+}
+
+function appendUserBubble(text){
+  removeQR();
+  const bg=document.getElementById("chatBg");
+  const row=document.createElement("div");
+  row.className="bubble-row user";
+  row.innerHTML=`<div class="bubble user">${text}<div class="bubble-time">${now()} <span class="tick">✓✓</span></div></div>`;
+  bg.appendChild(row);
+  scrollBottom();
+}
+
+function showTyping(){
+  const bg=document.getElementById("chatBg");
+  const d=document.createElement("div");
+  d.className="bubble-row";d.id="typing";
+  d.innerHTML=`<div class="bubble-avatar"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="14" fill="#e8f8ef"/><ellipse cx="14" cy="10" rx="5.5" ry="6.5" fill="#25a560"/></svg></div><div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  bg.appendChild(d);scrollBottom();
+}
+
+function removeTyping(){document.getElementById("typing")?.remove();}
+
+function appendQuickReplies(options,fn){
+  removeQR();
+  const bg=document.getElementById("chatBg");
+  const wrap=document.createElement("div");
+  wrap.className="quick-replies";wrap.id="qr";
+  options.forEach(o=>{
+    const b=document.createElement("button");b.className="qr-btn";b.textContent=o;
+    b.onclick=()=>{wrap.remove();fn(o);};
+    wrap.appendChild(b);
+  });
+  bg.appendChild(wrap);scrollBottom();
+}
+
+function showProducts(){
+  removeQR();
+  const bg=document.getElementById("chatBg");
+  const grid=document.createElement("div");grid.className="products-grid";
+  products.forEach(p=>{
+    const card=document.createElement("div");card.className="product-card";
+    card.innerHTML=`<div class="product-card-img" style="background:linear-gradient(135deg,${p.color},#e8f8ef)">${p.emoji}</div>
+    <div class="product-card-body">
+      <div class="product-card-name">${p.name}</div>
+      <div class="product-card-flavor">${p.flavor}</div>
+      <div class="product-card-tags"><span class="tag green">No Sugar</span><span class="tag blue">+Vits</span><span class="tag orange">Kids</span></div>
+      <div class="product-card-price">${p.per}</div>
+      <button class="order-btn" onclick="addToCart(${p.id})">+ Add to Cart 🛒</button>
+    </div>`;
+    grid.appendChild(card);
+  });
+  bg.appendChild(grid);scrollBottom();
+}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  cart[id]=(cart[id]||0)+1;
+  appendUserBubble(`Added ${p.emoji} ${p.name}!`);
+  setTimeout(()=>{
+    appendBotBubble(`Great pick! 🎉 <b>${p.name}</b> (${p.flavor}) is in your cart!<br>Want to add more or checkout?`);
+    appendQuickReplies(["➕ Add More","🛒 View Cart","✅ Checkout"],handleQuickReply);
+  },600);
+}
+
+function showCart(){
+  const items=Object.entries(cart);
+  if(!items.length){
+    appendBotBubble("Your cart is empty! Let's pick some DRIZO water 💧");
+    setTimeout(()=>{appendBotBubble("Here are our flavours:",false);showProducts();},400);
+    return;
+  }
+  let total=0;
+  let html=`<div class="order-summary"><div class="order-summary-title">🛒 Your Cart</div>`;
+  items.forEach(([id,qty])=>{
+    const p=products.find(x=>x.id==id);const sub=p.price*qty;total+=sub;
+    html+=`<div class="order-row"><span>${p.emoji} ${p.name} ×${qty}</span><span><b>₹${sub}</b></span></div>`;
+  });
+  html+=`<div class="order-total"><span>Total</span><span>₹${total}</span></div>`;
+  html+=`<button class="confirm-btn" onclick="startCheckout()">📲 Checkout via WhatsApp</button></div>`;
+  const bg=document.getElementById("chatBg");
+  const row=document.createElement("div");row.className="bubble-row";
+  row.innerHTML=`<div class="bubble-avatar"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="14" fill="#e8f8ef"/><ellipse cx="14" cy="10" rx="5.5" ry="6.5" fill="#25a560"/></svg></div><div class="bubble bot">${html}<div class="bubble-time">${now()}</div></div>`;
+  bg.appendChild(row);scrollBottom();
+}
+
+function startCheckout(){
+  convState="delivery";deliveryStep="name";
+  appendBotBubble("Let's get your order to you! 🚚<br>First, what's your <b>full name</b>?");
+  document.getElementById("msgInput").focus();
+}
+
+function handleDelivery(text){
+  if(deliveryStep==="name"){
+    deliveryData.name=text;deliveryStep="address";
+    appendBotBubble(`Hi <b>${text}</b>! 👋 What's your <b>delivery address</b>?`);
+  } else if(deliveryStep==="address"){
+    deliveryData.address=text;deliveryStep="phone";
+    appendBotBubble("Almost there! 📍 Your <b>WhatsApp phone number</b>?");
+  } else if(deliveryStep==="phone"){
+    deliveryData.phone=text;deliveryStep=null;convState="done";placeOrder();
+  }
+}
+
+function placeOrder(){
+  const items=Object.entries(cart);
+  let total=0,orderLines="";
+  items.forEach(([id,qty])=>{
+    const p=products.find(x=>x.id==id);total+=p.price*qty;
+    orderLines+=`${p.emoji} ${p.name} x${qty} = ₹${p.price*qty}%0A`;
+  });
+  const msg=`Hi DRIZO! I'd like to order:%0A%0A${orderLines}%0ATotal: ₹${total}%0A%0AName: ${deliveryData.name}%0AAddress: ${deliveryData.address}%0APhone: ${deliveryData.phone}%0A%0APlease confirm! 💧`;
+  const waUrl=`https://wa.me/919686602245?text=${msg}`;
+  showConfetti();
+  appendBotBubble(`🎊 Amazing <b>${deliveryData.name}</b>! Your order is ready!<br><br><a class="wa-link" href="${waUrl}" target="_blank">📲 Open WhatsApp to Confirm</a><br><br>Total: <b>₹${total}</b> · Delivery in 2-3 days 🚚<br><small style="color:#888">We'll confirm your order via WhatsApp!</small>`);
+  setTimeout(()=>{
+    appendBotBubble("Thanks for choosing DRIZO Buddy! Stay hydrated, stay super! 💪💧",false);
+  },1200);
+}
+
+function showConfetti(){
+  const cv=document.createElement("canvas");
+  cv.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999";
+  document.body.appendChild(cv);
+  const ctx=cv.getContext("2d");
+  cv.width=window.innerWidth;cv.height=window.innerHeight;
+  const particles=Array.from({length:100},()=>({
+    x:Math.random()*cv.width,y:-10,r:Math.random()*5+3,
+    c:`hsl(${Math.random()*360},80%,60%)`,
+    v:Math.random()*4+2,d:Math.random()*2-1,rot:Math.random()*360
+  }));
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    particles.forEach(p=>{
+      p.y+=p.v;p.x+=p.d;p.rot+=3;
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r);
+      ctx.restore();
+    });
+    if(++frame<150)requestAnimationFrame(draw);else cv.remove();
+  }
+  draw();
+}
+
+function handleQuickReply(text){
+  appendUserBubble(text);
+  setTimeout(()=>{
+    if(text.includes("Products")||text.includes("Add More")||text.includes("Browse")){
+      convState="products";
+      appendBotBubble("Choose your favourite DRIZO flavour! 😍");
+      showProducts();
+    } else if(text.includes("Cart")||text.includes("View Cart")){showCart();}
+    else if(text.includes("Checkout")||text.includes("Order")){startCheckout();}
+    else if(text.includes("Learn")){
+      appendBotBubble("DRIZO Buddy is <b>kids active water</b> loaded with vitamins B6, C & D3! 🌟<br><br>✅ Zero added sugar<br>✅ Natural fruity flavours<br>✅ Electrolytes for active play<br>✅ Paediatrician recommended<br><br>Perfect for school, sports & adventures! ⚽🎒🏃");
+      appendQuickReplies(["🛒 Order Now","🍓 See Products","📞 Support"],handleQuickReply);
+    } else if(text.includes("Support")){
+      appendBotBubble("Our team loves hearing from you! 💚<br><br>📧 hello@drizobuddy.com<br>📱 <a href='https://wa.me/919686602245' target='_blank' style='color:#1a7a4a;font-weight:800'>WhatsApp Us</a><br>⏰ Mon–Sat, 9am–6pm");
+    } else {botReply(text);}
+  },500);
+}
+
+async function botReply(userMsg){
+  if(isTyping)return;
+  isTyping=true;document.getElementById("sendBtn").disabled=true;
+  showTyping();
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:`You are Drizo, a cheerful and energetic AI chat buddy for DRIZO Buddy — a premium kids active water brand with ZERO added sugar and added vitamins (B6, C, D3). Speak in a fun, playful, encouraging tone that both kids and parents love. Help users discover products, understand health benefits, and place orders. 
+
+Products: Berry Blast (₹45/500ml), Watermelon Mint (₹45/500ml), Mango Orange (₹45/500ml), Mixed 12-pack (₹480).
+
+Keep replies concise (2-4 lines), friendly, and use 1-2 fun emojis. Never mention competitors. Always encourage healthy hydration. If they want to order, guide them to tap "Order Now". You are on a WhatsApp-style chat interface integrated with the DRIZO Buddy website.`,
+        messages:[{role:"user",content:userMsg}]
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    const reply=data.content?.[0]?.text||"Oops! Let me get our team to help 😊";
+    appendBotBubble(reply);
+    if(convState!=="delivery"&&convState!=="done"){
+      appendQuickReplies(["🛒 Order Now","🍓 Products","💡 Learn More","📞 Support"],handleQuickReply);
+    }
+  }catch(e){
+    removeTyping();
+    appendBotBubble("Hmm, I had a little hiccup! Try again or browse our products 💧");
+    appendQuickReplies(["🍓 See Products","📞 Support"],handleQuickReply);
+  }
+  isTyping=false;document.getElementById("sendBtn").disabled=false;
+}
+
+function sendMessage(){
+  const inp=document.getElementById("msgInput");
+  const txt=inp.value.trim();
+  if(!txt||isTyping)return;
+  inp.value="";
+  appendUserBubble(txt);
+  if(convState==="delivery"){handleDelivery(txt);return;}
+  const lower=txt.toLowerCase();
+  if(lower.includes("order")||lower.includes("buy")){
+    setTimeout(()=>{convState="products";appendBotBubble("Let's go! 🎉 Pick your DRIZO flavours:");showProducts();},500);
+  } else if(lower.includes("cart")||lower.includes("checkout")){
+    setTimeout(()=>showCart(),500);
+  } else if(lower.includes("product")||lower.includes("flavour")||lower.includes("flavor")){
+    setTimeout(()=>{appendBotBubble("Our DRIZO Buddy range 😍");showProducts();},500);
+  } else {botReply(txt);}
+}
+
+document.getElementById("msgInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendMessage();});
+
+window.addEventListener("load",()=>{
+  setTimeout(()=>{
+    appendBotBubble("Hey there! 👋 I'm <b>Drizo</b>, your DRIZO Buddy water pal! 💧");
+    setTimeout(()=>{
+      appendBotBubble("We make <b>yummy active water</b> for kids — <b>zero sugar</b>, packed with <b>vitamins B6, C & D3</b>! 🌟",false);
+      setTimeout(()=>{
+        appendBotBubble("What can I help you with today?",false);
+        appendQuickReplies(["🛒 Order DRIZO Water","🍓 See All Products","💡 Learn More","📞 Support"],handleQuickReply);
+      },700);
+    },800);
+  },500);
+});
+</script>
+</body>
+</html>
